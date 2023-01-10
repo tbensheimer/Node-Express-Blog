@@ -1,12 +1,9 @@
-const http = require('http');
-const _ = require('lodash');
 const express = require('express');
 
 const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(morgan("dev"));
 app.use(express.static("public"));
 
 app.get('/', (req, res) => {
@@ -26,7 +23,6 @@ app.get('/', (req, res) => {
     ]
 res.render('index', {title: "Trent's Blog", blogs })
 });
-
 
 
 app.get('/about', (req, res) => {

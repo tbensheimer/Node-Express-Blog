@@ -1,14 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Blog = require('./models/blog.js');
+const Blog = require('./models/blog');
+const port = process.env.PORT || 3000;
+
 
 const app = express();
 
-const dbURI = "connection string from mongo";
+const dbURI = "mongodb+srv://tbensheimer:TlJI4FehtueaIaaJ@blogcluster.hlxktaj.mongodb.net/?retryWrites=true&w=majority";
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
 .then((result) => {
     console.log(result);
-// app.listen(3000);  // since no connection string points to real Database, comment out
+    app.listen(port);
 })
 .catch((err) => {
     console.log(err);
@@ -20,14 +22,27 @@ app.set('view engine', 'ejs');
 
 app.use(express.static("public"));
 
+//Add blog as json to browser
+
 app.get('/add-blog', (req, res) => {
     const blog = new Blog({
-        title: 'new blog',
+        title: 'new blog 2',
         snippet: 'about this blog',
         body: 'more about this new blog boy'
     });
 
     blog.save()
+    .then((result) => {
+        res.send(result);
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+})
+
+//Retrieve all blogs from collection
+app.get('/all-blogs', (req, res) => {
+    Blog.find()
     .then((result) => {
         res.send(result)
     })
@@ -36,23 +51,32 @@ app.get('/add-blog', (req, res) => {
     })
 })
 
+//Retrieve a single blog
+// app.get('/single-blog', (req, res) => {
+//     Blog.findById("(id from mongo)")
+//     .then((result) => {
+//         res.send(result)
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     })
+// })
+
 app.get('/', (req, res) => {
-    console.log(req.url);
-    const blogs = [{
-        title: "Yoshi finds Mario",
-        snippet: "Loerm Ipsum Dolor..."},
-        {
-            title: "Yoshi finds Mario",
-            snippet: "Loerm Ipsum Dolor..."},
-            {
-                title: "Yoshi finds Mario",
-                snippet: "Loerm Ipsum Dolor..."},
-                {
-                    title: "Yoshi finds Mario",
-                    snippet: "Loerm Ipsum Dolor..."}
-    ]
-res.render('index', {title: "Trent's Blog", blogs })
+res.redirect('/blogs');
 });
+
+//Output document into view
+
+app.get('/blogs', (req, res) => {
+    Blog.find().sort({ createdAt: -1 })   //descending order
+    .then((result) => {
+        res.render('index', {title: "Trent's Blogs", blogs: result})
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+})
 
 
 app.get('/about', (req, res) => {
@@ -69,6 +93,4 @@ app.use((req, res) => {
     res.status(404).render('404', { title: "Error Code: 404" });
 })
 
-
-app.listen(3000);       // once real mongo database connection string applied, remove this line
     

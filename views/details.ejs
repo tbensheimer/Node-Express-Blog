@@ -12,10 +12,10 @@
 <%- include("./partials/footer.ejs") %>
 
 <script>
-    const trashcan = document.querySelector(".delete");
+    const trashcan = document.querySelector("a.delete");
     
     trashcan.addEventListener("click", (e) => {
-        const endpoint = `/blogs/${e.dataset.doc}`;
+        const endpoint = `/blogs/${trashcan.dataset.doc}`;
 
         fetch(endpoint, {
             method: 'DELETE'
@@ -27,3 +27,6 @@
         })
     })
     </script>
+
+</body>
+</html>

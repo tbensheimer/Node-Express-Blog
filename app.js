@@ -21,35 +21,37 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
 app.set('view engine', 'ejs');
 
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true}));
+
 
 //Add blog as json to browser
 
-app.get('/add-blog', (req, res) => {
-    const blog = new Blog({
-        title: 'new blog 2',
-        snippet: 'about this blog',
-        body: 'more about this new blog boy'
-    });
+// app.get('/add-blog', (req, res) => {
+//     const blog = new Blog({
+//         title: 'new blog 2',
+//         snippet: 'about this blog',
+//         body: 'more about this new blog boy'
+//     });
 
-    blog.save()
-    .then((result) => {
-        res.send(result);
-    })
-    .catch((err) => {
-        console.log(err);
-    })
-})
+//     blog.save()
+//     .then((result) => {
+//         res.send(result);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     })
+// })
 
 //Retrieve all blogs from collection
-app.get('/all-blogs', (req, res) => {
-    Blog.find()
-    .then((result) => {
-        res.send(result)
-    })
-    .catch((err) => {
-        console.log(err);
-    })
-})
+// app.get('/all-blogs', (req, res) => {
+//     Blog.find()
+//     .then((result) => {
+//         res.send(result)
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     })
+// })
 
 //Retrieve a single blog
 // app.get('/single-blog', (req, res) => {
@@ -72,6 +74,18 @@ app.get('/blogs', (req, res) => {
     Blog.find().sort({ createdAt: -1 })   //descending order
     .then((result) => {
         res.render('index', {title: "Trent's Blogs", blogs: result})
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+})
+
+app.post('/blogs', (req, res) => {
+    const blog = new Blog(req.body);
+
+    blog.save()
+    .then((result) => {
+        res.redirect('/blogs');
     })
     .catch((err) => {
         console.log(err);

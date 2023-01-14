@@ -16,7 +16,6 @@
     
     trashcan.addEventListener("click", (e) => {
         const endpoint = `/blogs/${trashcan.dataset.doc}`;
-
         fetch(endpoint, {
             method: 'DELETE'
         })

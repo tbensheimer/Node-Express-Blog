@@ -94,6 +94,7 @@ app.post('/blogs', (req, res) => {
 
 app.get('/blogs/:id', (req, res) => {
     const id = req.params.id;
+    console.log(id);
     Blog.findById(id)
     .then((result) => {
         res.render('details', { title: 'Blog Details', blog: result })
@@ -105,6 +106,8 @@ app.get('/blogs/:id', (req, res) => {
 
 app.delete('/blogs/:id', (req, res) => {
     const id = req.params.id;
+    console.log(id);
+
     Blog.findByIdAndDelete(id)
     .then((result) => {
         res.json({redirect: '/blogs'});

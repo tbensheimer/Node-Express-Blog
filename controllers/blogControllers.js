@@ -13,7 +13,6 @@ const blog_index = (req, res) => {
 
 const blog_post = (req, res) => {
     const blog = new Blog(req.body);
-
     blog.save()
     .then((result) => {
         res.redirect('/blogs');
@@ -36,7 +35,6 @@ const blog_details = (req, res) => {
 
 const blog_delete = (req, res) => {
     const id = req.params.id;
-
     Blog.findByIdAndDelete(id)
     .then((result) => {
         res.json({redirect: '/blogs'});
@@ -44,6 +42,29 @@ const blog_delete = (req, res) => {
     .catch((err) => {
         console.log(err);
     })
+}
+
+const blog_updateForm = (req, res) => {
+    const id = req.params.id;
+    Blog.findById(id)
+    .then((result) => {
+        res.render('update', {title: "Update blog", blog: result});
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+}
+
+const blog_edit = (req, res) => {
+const id = req.params.id;
+Blog.findByIdAndUpdate(id, req.body)
+.then((result) => {
+    res.redirect(`/blogs/${id}`);
+})
+.catch((err) => {
+    console.log(err);
+})
+
 }
 
 const blog_about = (req, res) => {
@@ -65,5 +86,7 @@ module.exports = {
     blog_delete,
     blog_about,
     blog_create,
-    blog_redirectToHome
+    blog_redirectToHome,
+    blog_updateForm,
+    blog_edit
 }

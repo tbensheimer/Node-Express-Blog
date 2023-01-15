@@ -5,11 +5,14 @@ const router = express.Router();
 router.get('/', blogController.blog_redirectToHome);
     router.get('/blogs', blogController.blog_index);
     router.post('/blogs', blogController.blog_post);
+    router.post('/blogs/:id', blogController.blog_edit);
+
     router.get('/blogs/:id', blogController.blog_details);
     router.delete('/blogs/:id', blogController.blog_delete);
+    router.get('/blogs/update/:id', blogController.blog_updateForm);
     router.get('/about', blogController.blog_about);
     router.get('/create', blogController.blog_create);
-
+    
     module.exports = router;
     
     // example scenerios for getting certain blogs

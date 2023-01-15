@@ -1,0 +1,20 @@
+<%- include("./partials/head.ejs") %>
+<%- include("./partials/nav.ejs") %>
+<h2>Update Blog</h2>
+
+<div class="update-blog">
+    <form action="/blogs/<%= blog._id %>" method="POST">
+        <label for="title">Blog Title </label>
+        <input name="title" id="title" type="text" value="<%= blog.title %>" required >
+        <label for="snip">Blog Snippet</label>
+        <input name="snippet" id="snip" type="text" value="<%= blog.snippet %>" required >
+        <label for="body">Blog Body</label>
+        <textarea name="body" id="body" required><%- blog.body %></textarea>
+        <button>Save Changes</button>
+    </form>
+</div>
+
+<%- include("./partials/footer.ejs") %>
+
+</body>
+</html>

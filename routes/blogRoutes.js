@@ -1,68 +1,16 @@
 const express = require('express');
-const Blog = require('../models/blog');
-
+const blogController = require('../controllers/blogControllers');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.redirect('/blogs');
-    });
-    
-    //Output document into view
-    router.get('/blogs', (req, res) => {
-        Blog.find().sort({ createdAt: -1 })   //descending order
-        .then((result) => {
-            res.render('index', {title: "Trent's Blogs", blogs: result})
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-    })
-    
-    router.post('/blogs', (req, res) => {
-        const blog = new Blog(req.body);
-    
-        blog.save()
-        .then((result) => {
-            res.redirect('/blogs');
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-    })
-    
-    router.get('/blogs/:id', (req, res) => {
-        const id = req.params.id;
-        Blog.findById(id)
-        .then((result) => {
-            res.render('details', { title: 'Blog Details', blog: result })
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-    })
-    
-    router.delete('/blogs/:id', (req, res) => {
-        const id = req.params.id;
-    
-        Blog.findByIdAndDelete(id)
-        .then((result) => {
-            res.json({redirect: '/blogs'});
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-    })
-    
-    
-    router.get('/about', (req, res) => {
-    
-        res.render('about', { title: "About Me" });
-    })
-    
-    router.get('/create', (req, res) => {
-    
-        res.render('create', { title: "Create New Blog"});
-    })
+router.get('/', blogController.blog_redirectToHome);
+    router.get('/blogs', blogController.blog_index);
+    router.post('/blogs', blogController.blog_post);
+    router.get('/blogs/:id', blogController.blog_details);
+    router.delete('/blogs/:id', blogController.blog_delete);
+    router.get('/about', blogController.blog_about);
+    router.get('/create', blogController.blog_create);
+
+    module.exports = router;
     
     // example scenerios for getting certain blogs
     
@@ -107,4 +55,3 @@ router.get('/', (req, res) => {
     // })
     
 
-module.exports = router;
